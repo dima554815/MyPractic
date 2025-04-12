@@ -1499,7 +1499,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 290500737}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 844187298}
+        m_TargetAssemblyTypeName: Switching, Assembly-CSharp
+        m_MethodName: ChangeState
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1368290898}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &290500737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2403,7 +2415,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 592427801}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1368290904}
+        m_TargetAssemblyTypeName: TwoNumbersComparer, Assembly-CSharp
+        m_MethodName: CompareNumbers
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &592427801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2968,7 +2992,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 826457538}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 844187298}
+        m_TargetAssemblyTypeName: Switching, Assembly-CSharp
+        m_MethodName: ChangeState
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1368290898}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &826457538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3018,7 +3054,6 @@ GameObject:
   - component: {fileID: 844187297}
   - component: {fileID: 844187296}
   - component: {fileID: 844187295}
-  - component: {fileID: 844187299}
   - component: {fileID: 844187298}
   m_Layer: 0
   m_Name: EventSystem
@@ -3091,20 +3126,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstScreen: {fileID: 2069645713}
   secondScreen: {fileID: 1368290898}
---- !u!114 &844187299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 844187294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d934bba076bf25e4db7066fa585242ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firstScreen: {fileID: 0}
-  secondScreen: {fileID: 0}
 --- !u!1 &931407469
 GameObject:
   m_ObjectHideFlags: 0
@@ -3385,9 +3406,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a82dd53ea4ea34ba3fb42d59adf29c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OneNumberInputField: {fileID: 0}
-  TwoNumberInputField: {fileID: 0}
-  ResultText: {fileID: 0}
+  inputField1: {fileID: 0}
+  inputField2: {fileID: 0}
+  resultText: {fileID: 0}
 --- !u!1 &1016209943
 GameObject:
   m_ObjectHideFlags: 0
@@ -4353,6 +4374,7 @@ GameObject:
   - component: {fileID: 1368290901}
   - component: {fileID: 1368290900}
   - component: {fileID: 1368290899}
+  - component: {fileID: 1368290904}
   m_Layer: 5
   m_Name: Canvas (1)
   m_TagString: Untagged
@@ -4372,9 +4394,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a82dd53ea4ea34ba3fb42d59adf29c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OneNumberInputField: {fileID: 728871293}
-  TwoNumberInputField: {fileID: 370049084}
-  ResultText: {fileID: 1211348111}
+  inputField1: {fileID: 0}
+  inputField2: {fileID: 0}
+  resultText: {fileID: 0}
 --- !u!114 &1368290900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4460,6 +4482,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1368290904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368290898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b3f8d9ed2053444e8e99bb6f6054826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField1: {fileID: 728871293}
+  inputField2: {fileID: 370049084}
+  resultText: {fileID: 1211348111}
 --- !u!1 &1400336723
 GameObject:
   m_ObjectHideFlags: 0
@@ -4542,7 +4579,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1400336726}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 844187298}
+        m_TargetAssemblyTypeName: Switching, Assembly-CSharp
+        m_MethodName: ChangeState
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2069645713}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1400336726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4952,7 +5001,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1447684642}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 844187298}
+        m_TargetAssemblyTypeName: Switching, Assembly-CSharp
+        m_MethodName: ChangeState
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2069645713}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1447684642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6336,9 +6397,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a82dd53ea4ea34ba3fb42d59adf29c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OneNumberInputField: {fileID: 760503962}
-  TwoNumberInputField: {fileID: 1043532204}
-  ResultText: {fileID: 232770086}
+  inputField1: {fileID: 760503962}
+  inputField2: {fileID: 1043532204}
+  resultText: {fileID: 232770086}
 --- !u!1 &2125535223
 GameObject:
   m_ObjectHideFlags: 0
