@@ -1,48 +1,91 @@
 using UnityEngine;
-using TMPro;
+using TMPro; // подключаем TextMeshPro
 
 public class Calculator : MonoBehaviour
 {
-   public TMP_InputField OneNumberInputField;
-   public TMP_InputField TwoNumberInputField;
-   public TMP_Text ResultText;
+    // Поля для ввода чисел (TMP)
+    public TMP_InputField inputField1;
+    public TMP_InputField inputField2;
+
+    // Текстовое поле для вывода результата (TMP)
+    public TMP_Text resultText;
+
+    void Start()
+    {
+        // Ограничиваем ввод только числовыми значениями
+        inputField1.contentType = TMP_InputField.ContentType.DecimalNumber;
+        inputField2.contentType = TMP_InputField.ContentType.DecimalNumber;
+        inputField1.ForceLabelUpdate();
+        inputField2.ForceLabelUpdate();
+    }
+
+    private bool ValidateInputs(out float num1, out float num2)
+    {
+        num1 = 0;
+        num2 = 0;
+
+        if (string.IsNullOrWhiteSpace(inputField1.text) || string.IsNullOrWhiteSpace(inputField2.text))
+        {
+            resultText.text = "Ошибка! Поля не должны быть пустыми.";
+            return false;
+        }
+
+        if (!float.TryParse(inputField1.text.Trim(), out num1) || !float.TryParse(inputField2.text.Trim(), out num2))
+        {
+            resultText.text = "Ошибка! Введите корректные числа.";
+            return false;
+        }
+
+        return true;
+    }
+
+    // Метод для сложения
     public void Add()
     {
-        float num1 = float.Parse(OneNumberInputField.text);
-        float num2 = float.Parse(TwoNumberInputField.text);
+        if (!ValidateInputs(out float num1, out float num2)) return;
+
+       
         float result = num1 + num2;
-        ResultText.text = result.ToString();
+        resultText.text = "Результат: " + result.ToString();
     }
+
     // Метод для вычитания
     public void Subtract()
     {
-        float num1 = float.Parse(OneNumberInputField.text);
-        float num2 = float.Parse(TwoNumberInputField.text);
+        if (!ValidateInputs(out float num1, out float num2)) return;
+
+       
         float result = num1 - num2;
-        ResultText.text = result.ToString();
+        resultText.text = "Результат: " + result.ToString();
     }
+
     // Метод для умножения
     public void Multiply()
     {
-        float num1 = float.Parse(OneNumberInputField.text);
-        float num2 = float.Parse(TwoNumberInputField.text);
+        if (!ValidateInputs(out float num1, out float num2)) return;
+
         float result = num1 * num2;
-        ResultText.text = result.ToString();
+        resultText.text = "Результат: " + result.ToString();
     }
+
     // Метод для деления
     public void Divide()
     {
-        float num1 = float.Parse(OneNumberInputField.text);
-        float num2 = float.Parse(TwoNumberInputField.text);
-        // Проверка на деление на ноль
-        if (num2 != 0)
+        if (!ValidateInputs(out float num1, out float num2)) return;
+
+        if (num1 == 0)
         {
-            float result = num1 / num2;
-            ResultText.text = result.ToString();
+            resultText.text = "Ошибка! Деление на ноль.";
+            return;
         }
-        else
+
+        if (num2 == 0)
         {
-            ResultText.text = "Ошибка! Деление на ноль!";
+            resultText.text = "Ошибка! Деление на ноль!";
+            return;
         }
+
+        float result = num1 / num2;
+        resultText.text = "Результат: " + result.ToString();
     }
 }
