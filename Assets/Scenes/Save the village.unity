@@ -1270,13 +1270,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 3ab3f45c7a72d8b4da82023e2fa3f303, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1063445361
@@ -2619,13 +2619,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 3ab3f45c7a72d8b4da82023e2fa3f303, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &2096005346
@@ -2669,19 +2669,19 @@ MonoBehaviour:
   EatingTimer: {fileID: 407836712}
   RaidTimerImg: {fileID: 1487485419}
   PeasantTimerImg: {fileID: 1063445360}
-  warriorTimerImg: {fileID: 2096005345}
+  WarriorTimerImg: {fileID: 0}
   peasantBatton: {fileID: 1098531038}
   warriorBatton: {fileID: 1805054830}
-  resourcesText: {fileID: 0}
+  resourcesText: {fileID: 1059347431}
   peasantCount: 3
-  warriorsCount: 0
+  warriorsCount: 1
   wheatCount: 10
   wheatPerPeasant: 2
   wheatToWarriors: 5
   peasantCost: 4
-  warriorsCost: 0
-  peasantCreateTime: 0
-  warriorCreateTime: 0
+  warriorCost: 8
+  peasantCreateTime: 5
+  warriorCreateTime: 8
   raidMaxTime: 20
   raidIncrease: 2
   nextRaid: 0
