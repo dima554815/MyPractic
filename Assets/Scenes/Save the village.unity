@@ -2193,6 +2193,7 @@ GameObject:
   - component: {fileID: 602448857}
   - component: {fileID: 602448856}
   - component: {fileID: 602448855}
+  - component: {fileID: 602448858}
   m_Layer: 5
   m_Name: PresentBatton
   m_TagString: Untagged
@@ -2264,9 +2265,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1057916175}
-        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
-        m_MethodName: OpenMenu
+      - m_Target: {fileID: 602448858}
+        m_TargetAssemblyTypeName: PrezentButton, Assembly-CSharp
+        m_MethodName: OpenChestGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2314,6 +2315,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602448853}
   m_CullTransparentMesh: 1
+--- !u!114 &602448858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602448853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 420f3a40cae514641ac3275dd71ae48d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  villageCanvas: {fileID: 812434903}
+  chestGameCanvas: {fileID: 874996584}
+  chestButton: {fileID: 602448853}
+  chestButtonDelay: 5
 --- !u!1 &623394746
 GameObject:
   m_ObjectHideFlags: 0
@@ -2696,6 +2713,7 @@ GameObject:
   m_Component:
   - component: {fileID: 719193721}
   - component: {fileID: 719193720}
+  - component: {fileID: 719193722}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -2746,6 +2764,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &719193722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719193719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319a834340d257f41b99c1052123242f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  villageCanvas: {fileID: 812434903}
+  chestGameCanvas: {fileID: 874996584}
 --- !u!1 &737215185
 GameObject:
   m_ObjectHideFlags: 0
@@ -3259,7 +3291,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &874996585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3435,7 +3467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1022203399
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4188,7 +4220,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 14}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1254382356
@@ -4211,7 +4243,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: "\u0417\u0430\u043D\u043E\u0432\u043E"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4220,8 +4252,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4238,8 +4270,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 53
+  m_fontSizeBase: 53
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4504,9 +4536,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1057916175}
-        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
-        m_MethodName: ReturnToGame
+      - m_Target: {fileID: 719193722}
+        m_TargetAssemblyTypeName: GameExt, Assembly-CSharp
+        m_MethodName: CloseChestGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5093,9 +5125,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1057916175}
-        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
-        m_MethodName: ReturnToGame
+      - m_Target: {fileID: 719193722}
+        m_TargetAssemblyTypeName: GameExt, Assembly-CSharp
+        m_MethodName: CloseChestGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
