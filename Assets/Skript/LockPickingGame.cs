@@ -28,6 +28,7 @@ public class LockPickingGame : MonoBehaviour
     private int[] currentPins = new int[3];
     private float currentTime;
     private bool gameActive = true;
+    private bool isTimerRunning = false;
 
     [Header("Настройка фона")]
     public Image backgroundImage;
@@ -46,9 +47,9 @@ public class LockPickingGame : MonoBehaviour
 
     void Update()
     {
-        if (!gameActive) return;
+        if (!gameActive || !isTimerRunning) return;
         
-        currentTime -= Time.deltaTime;
+        currentTime -= Time.unscaledDeltaTime;
         timerText.text = "Время: " + Mathf.Max(0, Mathf.Ceil(currentTime)).ToString();
         
         if (currentTime <= 0)
@@ -100,6 +101,7 @@ public class LockPickingGame : MonoBehaviour
         
         currentTime = initialTime;
         gameActive = true;
+        isTimerRunning = true;
         winPanel.SetActive(false);
         losePanel.SetActive(false);
     }
@@ -143,6 +145,7 @@ public class LockPickingGame : MonoBehaviour
     private void WinGame()
     {
         gameActive = false;
+        isTimerRunning = false;
         winPanel.SetActive(true);
         SetBackground(winBackground);
     }
@@ -150,11 +153,13 @@ public class LockPickingGame : MonoBehaviour
     private void LoseGame()
     {
         gameActive = false;
+        isTimerRunning = false;
         losePanel.SetActive(true);
         SetBackground(loseBackground);
     }
     public void ResetGame()
     {
+        isTimerRunning = false;
         GenerateSolvableCombination();
         InitializeGame();
         SetBackground(defaultBackground);
@@ -171,4 +176,14 @@ public class LockPickingGame : MonoBehaviour
     public void UseDrill() => UseTool(0);
     public void UseHammer() => UseTool(1);
     public void UsePick() => UseTool(2);
+
+    void OnEnable()
+    {
+        isTimerRunning = true;
+    }
+
+    void OnDisable()
+    {
+        isTimerRunning = false;
+    }
 }

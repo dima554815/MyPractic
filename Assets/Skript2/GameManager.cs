@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public float raidMaxTime;
     public int raidIncrease;
     public int nextRaid;
-
+    public GameObject GameOverScreen;
     private float peasantTimer = -2;
     private float warriorTimer = -2;
     private float raidTimer;
@@ -39,18 +39,32 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateText();
+        raidTimer = raidMaxTime;
+        UpdateButtonsInteractable();
     }
 
     void Update()
     {
+        raidTimer -= Time.deltaTime;
+        RaidTimerImg.fillAmount = raidTimer / raidMaxTime;
+
+        if(raidTimer <=0)
+        {
+            raidTimer = raidMaxTime;
+            warriorsCount -= nextRaid;
+            nextRaid += raidIncrease;
+        }
+          
         if(HarvestTimer.Tick)
         {
             wheatCount += peasantCount * wheatPerPeasant;
+            UpdateButtonsInteractable();
         }
 
         if(EatingTimer.Tick)
         {
             wheatCount -= warriorsCount * wheatToWarriors;
+            UpdateButtonsInteractable();
         }
 
         if(peasantTimer > 0)
@@ -64,6 +78,7 @@ public class GameManager : MonoBehaviour
             peasantBatton.interactable = true;
             peasantCount += 1;
             peasantTimer = -2;
+            UpdateButtonsInteractable();
         }
 
         if(warriorTimer > 0)
@@ -77,23 +92,38 @@ public class GameManager : MonoBehaviour
             warriorBatton.interactable = true;
             warriorsCount += 1;
             warriorTimer = -2;
+            UpdateButtonsInteractable();
         }
 
         UpdateText();
+
+        if(warriorsCount < 0)
+        {
+            Time.timeScale = 0;
+            GameOverScreen.SetActive(true);
+        }
     }
 
     public void CreatePeasant()
     {
-        wheatCount -= peasantCost;
-        peasantTimer = peasantCreateTime;
-        peasantBatton.interactable = false;
+        if (wheatCount >= peasantCost)
+        {
+            wheatCount -= peasantCost;
+            peasantTimer = peasantCreateTime;
+            peasantBatton.interactable = false;
+            UpdateButtonsInteractable();
+        }
     }
 
     public void CreateWarrior()
     {
-        wheatCount -= warriorCost;
-        warriorTimer = warriorCreateTime;
-        warriorBatton.interactable = false;
+        if (wheatCount >= warriorCost)
+        {
+            wheatCount -= warriorCost;
+            warriorTimer = warriorCreateTime;
+            warriorBatton.interactable = false;
+            UpdateButtonsInteractable();
+        }
     }
 
     private void UpdateText()
@@ -101,11 +131,10 @@ public class GameManager : MonoBehaviour
         resourcesText.text = peasantCount + "\n" + warriorsCount + "\n\n" + wheatCount;
     }
 
-
-
-
-
-
-
-
+    private void UpdateButtonsInteractable()
+    {
+        // Проверяем, достаточно ли пшеницы для найма и не идет ли уже процесс найма
+        peasantBatton.interactable = wheatCount >= peasantCost && peasantTimer <= -1;
+        warriorBatton.interactable = wheatCount >= warriorCost && warriorTimer <= -1;
+    }
 }
