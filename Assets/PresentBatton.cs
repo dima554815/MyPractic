@@ -38,8 +38,8 @@ public class PresentBatton : MonoBehaviour
     void OpenChestGame()
     {
         // Останавливаем игру в деревне
-        Time.timeScale = 0f;
-        isChestGameActive = true;
+        //Time.timeScale = 0f;
+        //isChestGameActive = true;
 
         // Показываем мини-игру
         chestGameCanvas.SetActive(true);
