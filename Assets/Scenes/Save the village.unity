@@ -205,7 +205,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 719193720}
+      - m_Target: {fileID: 874996589}
         m_TargetAssemblyTypeName: LockPickingGame, Assembly-CSharp
         m_MethodName: UsePick
         m_Mode: 1
@@ -2329,7 +2329,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602448853}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2386,9 +2386,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 602448858}
-        m_TargetAssemblyTypeName: PrezentButton, Assembly-CSharp
-        m_MethodName: OpenChestGame
+      - m_Target: {fileID: 719193723}
+        m_TargetAssemblyTypeName: GameScript, Assembly-CSharp
+        m_MethodName: OpenMiniGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2419,7 +2419,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: d9d7327e4d5a36441b0e8fa274848578, type: 3}
-  m_Type: 3
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2742,8 +2742,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041F\u0440\u0438\u0439\u0434\u0438 \u043A \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044E:
-    5 5 5"
+  m_text: "\u041F\u0440\u0438\u0439\u0434\u0438 \u043A \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044E: "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2829,8 +2828,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 719193721}
-  - component: {fileID: 719193720}
-  - component: {fileID: 719193722}
+  - component: {fileID: 719193723}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -2838,34 +2836,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &719193720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 719193719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7788bf68363176a41ad4f76556a4358b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minPinValue: 0
-  maxPinValue: 9
-  initialTime: 50
-  pinTexts:
-  - {fileID: 1436457896}
-  - {fileID: 1907132353}
-  - {fileID: 1848945188}
-  timerText: {fileID: 1660831930}
-  targetPinsText: {fileID: 648760371}
-  winPanel: {fileID: 1087599372}
-  losePanel: {fileID: 1022203398}
-  resetButton: {fileID: 1311664981}
-  backgroundImage: {fileID: 646479173}
-  defaultBackground: {fileID: 21300000, guid: d9d7327e4d5a36441b0e8fa274848578, type: 3}
-  winBackground: {fileID: 21300000, guid: f30cdf85a7e344241a2336d28afc0584, type: 3}
-  loseBackground: {fileID: 21300000, guid: d9d7327e4d5a36441b0e8fa274848578, type: 3}
 --- !u!4 &719193721
 Transform:
   m_ObjectHideFlags: 0
@@ -2881,7 +2851,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &719193722
+--- !u!114 &719193723
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2890,9 +2860,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 719193719}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 319a834340d257f41b99c1052123242f, type: 3}
+  m_Script: {fileID: 11500000, guid: 44dd97585f610304e81436d92042ab03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  villageCanvas: {fileID: 812434906}
+  miniGameCanvas: {fileID: 874996587}
+  chestButton: {fileID: 602448853}
+  chestCooldown: 10
 --- !u!1 &730151813
 GameObject:
   m_ObjectHideFlags: 0
@@ -3232,7 +3206,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 719193720}
+      - m_Target: {fileID: 874996589}
         m_TargetAssemblyTypeName: LockPickingGame, Assembly-CSharp
         m_MethodName: UseDrill
         m_Mode: 1
@@ -3365,7 +3339,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 719193720}
+      - m_Target: {fileID: 874996589}
         m_TargetAssemblyTypeName: LockPickingGame, Assembly-CSharp
         m_MethodName: UseHammer
         m_Mode: 1
@@ -3796,6 +3770,7 @@ GameObject:
   - component: {fileID: 874996587}
   - component: {fileID: 874996586}
   - component: {fileID: 874996585}
+  - component: {fileID: 874996589}
   m_Layer: 5
   m_Name: Canvas2
   m_TagString: Untagged
@@ -3886,6 +3861,34 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &874996589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874996584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7788bf68363176a41ad4f76556a4358b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minPinValue: 0
+  maxPinValue: 9
+  gameDuration: 30
+  pinTexts:
+  - {fileID: 1436457896}
+  - {fileID: 1907132353}
+  - {fileID: 1848945188}
+  timerText: {fileID: 1660831930}
+  targetPinsText: {fileID: 648760371}
+  winPanel: {fileID: 1087599372}
+  losePanel: {fileID: 1022203398}
+  exitButton: {fileID: 1462851790}
+  backgroundImage: {fileID: 646479173}
+  defaultBackground: {fileID: 21300000, guid: d9d7327e4d5a36441b0e8fa274848578, type: 3}
+  winBackground: {fileID: 21300000, guid: f30cdf85a7e344241a2336d28afc0584, type: 3}
+  loseBackground: {fileID: 21300000, guid: d9d7327e4d5a36441b0e8fa274848578, type: 3}
 --- !u!1 &884680242
 GameObject:
   m_ObjectHideFlags: 0
@@ -4200,7 +4203,6 @@ GameObject:
   - component: {fileID: 1057916174}
   - component: {fileID: 1057916173}
   - component: {fileID: 1057916172}
-  - component: {fileID: 1057916175}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -4258,21 +4260,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1057916175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1057916171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8117fa99448a1434fbd63043ef5423ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  villageGameCanvas: {fileID: 812434903}
-  chestGameCanvas: {fileID: 874996584}
-  chestButton: {fileID: 602448855}
 --- !u!1 &1058501597
 GameObject:
   m_ObjectHideFlags: 0
@@ -4579,7 +4566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1087599373
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5199,7 +5186,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 719193720}
+      - m_Target: {fileID: 874996589}
         m_TargetAssemblyTypeName: LockPickingGame, Assembly-CSharp
         m_MethodName: ResetGame
         m_Mode: 1
@@ -5332,9 +5319,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 719193719}
-        m_TargetAssemblyTypeName: GameExt, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 719193723}
+        m_TargetAssemblyTypeName: GameScript, Assembly-CSharp
+        m_MethodName: CloseMiniGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5921,9 +5908,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 719193722}
-        m_TargetAssemblyTypeName: GameExt, Assembly-CSharp
-        m_MethodName: CloseChestGame
+      - m_Target: {fileID: 719193723}
+        m_TargetAssemblyTypeName: GameScript, Assembly-CSharp
+        m_MethodName: CloseMiniGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

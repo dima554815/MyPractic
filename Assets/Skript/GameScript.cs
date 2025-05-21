@@ -1,71 +1,123 @@
+/*using UnityEngine;
+using UnityEngine.UI;
+
+public class GameScript : MonoBehaviour
+{
+    public Canvas villageCanvas;
+    public Canvas miniGameCanvas;
+    public GameObject chestButton;
+    public float chestCooldown = 10f;
+
+    private float cooldownTimer;
+    private bool isChestAvailable = true;
+
+    void Start()
+    {
+        villageCanvas.gameObject.SetActive(true);
+        miniGameCanvas.gameObject.SetActive(false);
+        chestButton.SetActive(false);
+        StartCooldown();
+    }
+
+    void Update()
+    {
+        if (!isChestAvailable)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0f)
+            {
+                ShowChestButton();
+            }
+        }
+    }
+
+    public void OpenMiniGame()
+    {
+        if (!isChestAvailable) return;
+
+        villageCanvas.gameObject.SetActive(false);
+        miniGameCanvas.gameObject.SetActive(true);
+        chestButton.SetActive(false);
+    }
+
+    public void CloseMiniGame()
+    {
+        villageCanvas.gameObject.SetActive(true);
+        miniGameCanvas.gameObject.SetActive(false);
+        StartCooldown();
+    }
+
+    private void StartCooldown()
+    {
+        isChestAvailable = false;
+        cooldownTimer = chestCooldown;
+    }
+
+    private void ShowChestButton()
+    {
+        chestButton.SetActive(true);
+        isChestAvailable = true;
+    }
+}*/
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameScript : MonoBehaviour
 {
-    [Header("Канвасы")]
-    public GameObject villageCanvas;
-    public GameObject miniGameCanvas;
+    public Canvas villageCanvas;
+    public Canvas miniGameCanvas;
+    public GameObject chestButton;
+    public float chestCooldown = 10f;
 
-    [Header("Кнопка запуска мини-игры")]
-    public Button chestButton;
-
-    [Header("Выход из мини-игры")]
-    public Button exitMiniGameButton;
-
-    [Header("Задержка появления кнопки сундука")]
-    public float chestButtonDelay = 10f;
-
-    private LockPickingGame lockPickingGame;
+    private float cooldownTimer;
+    private bool isChestAvailable = true;
 
     void Start()
     {
-        // Скрыть мини-игру и кнопку в начале
-        miniGameCanvas.SetActive(false);
-        chestButton.gameObject.SetActive(false);
-
-        // Скрыть мини-игру, показать деревню
-        villageCanvas.SetActive(true);
-
-        // Найти скрипт мини-игры
-        lockPickingGame = miniGameCanvas.GetComponentInChildren<LockPickingGame>();
-
-        // Назначить кнопки
-        chestButton.onClick.AddListener(OpenMiniGame);
-        exitMiniGameButton.onClick.AddListener(CloseMiniGame);
-
-        // Запустить таймер появления сундука
-        Invoke(nameof(EnableChestButton), chestButtonDelay);
+        villageCanvas.gameObject.SetActive(true);
+        miniGameCanvas.gameObject.SetActive(false);
+        chestButton.SetActive(false);
+        StartCooldown();
     }
 
-    void EnableChestButton()
+    void Update()
     {
-        chestButton.gameObject.SetActive(true);
+        if (!isChestAvailable)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0f) ShowChestButton();
+        }
     }
 
-    void OpenMiniGame()
+    public void OpenMiniGame()
     {
-        // Включить мини-игру, отключить деревню
-        miniGameCanvas.SetActive(true);
-        villageCanvas.SetActive(false);
-        chestButton.gameObject.SetActive(false);
-
-        // Запустить мини-игру
-        if (lockPickingGame != null)
-            lockPickingGame.StartMiniGame();
+        if (!isChestAvailable) return;
+        
+        // Полная остановка деревни
+        villageCanvas.gameObject.SetActive(false);
+        Time.timeScale = 0f; // Останавливаем все процессы
+        
+        miniGameCanvas.gameObject.SetActive(true);
+        chestButton.SetActive(false);
     }
 
-    void CloseMiniGame()
+    public void CloseMiniGame()
     {
-        // Остановить мини-игру
-        if (lockPickingGame != null)
-            lockPickingGame.ResetGame();
+        Time.timeScale = 1f; // Возобновляем время
+        villageCanvas.gameObject.SetActive(true);
+        miniGameCanvas.gameObject.SetActive(false);
+        StartCooldown();
+    }
 
-        // Включить деревню, отключить мини-игру
-        miniGameCanvas.SetActive(false);
-        villageCanvas.SetActive(true);
+    private void StartCooldown()
+    {
+        isChestAvailable = false;
+        cooldownTimer = chestCooldown;
+    }
 
-        // Появление кнопки сундука через задержку
-        Invoke(nameof(EnableChestButton), chestButtonDelay);
+    private void ShowChestButton()
+    {
+        chestButton.SetActive(true);
+        isChestAvailable = true;
     }
 }
