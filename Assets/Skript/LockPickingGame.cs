@@ -107,6 +107,11 @@ public class LockPickingGame : MonoBehaviour
     public Sprite winBackground;
     public Sprite loseBackground;
 
+    [Header("Reward Display")]
+    public TextMeshProUGUI warriorsRewardText;
+    public TextMeshProUGUI peasantsRewardText;
+    public TextMeshProUGUI wheatRewardText;
+
     // Инструменты и их эффекты
     private readonly int[][] tools = {
         new int[] {1, -1, 0},   // Дрель
@@ -211,6 +216,34 @@ public class LockPickingGame : MonoBehaviour
         gameActive = false;
         losePanel.SetActive(true);
         SetBackground(loseBackground);
+
+         // Генерируем награды
+        warriorsReward = Random.Range(1, 6); // 1-5 воинов
+        peasantsReward = Random.Range(1, 4); // 1-3 крестьян
+        wheatReward = Random.Range(10, 31); // 10-30 пшеницы
+    
+        // Отображаем награды
+        warriorsRewardText.text = "+" + warriorsReward;
+        peasantsRewardText.text = "+" + peasantsReward;
+        wheatRewardText.text = "+" + wheatReward;
+    }
+
+    // Вызывается при нажатии кнопки "Забрать награду"
+    public void ClaimReward()
+    {
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        if (gameManager != null)
+        {
+            gameManager.warriorsCount += warriorsReward;
+            gameManager.peasantCount += peasantsReward;
+            gameManager.wheatCount += wheatReward;
+        
+            gameManager.UpdateText();
+            gameManager.UpdateButtonsInteractable();
+        }
+    
+        // Закрываем мини-игру
+        FindObjectOfType<GameScript>().CloseMiniGame();
     }
 
     private void SetBackground(Sprite background)
