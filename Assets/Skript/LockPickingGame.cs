@@ -129,7 +129,7 @@ public class LockPickingGame : MonoBehaviour
 
     private void OnEnable()
     {
-       // GenerateSolvableCombination();
+        GenerateSolvableCombination();
         ResetGame();
     }
 
@@ -245,6 +245,7 @@ public class LockPickingGame : MonoBehaviour
             gameManager.wheatCount += wheatReward;
             
             gameManager.UpdateAllUI();
+            //gameManager.UpdateButtonsInteractable();
         }
         
         CloseMiniGame();
@@ -264,5 +265,7 @@ public class LockPickingGame : MonoBehaviour
         FindObjectOfType<GameScript>().CloseMiniGame();
     }
 
-   
+    public void UseDrill() => UseTool(0);
+    public void UseHammer() => UseTool(1);
+    public void UsePick() => UseTool(2);
 }

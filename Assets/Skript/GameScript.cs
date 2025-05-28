@@ -38,6 +38,7 @@ public class GameScript : MonoBehaviour
         villageCanvas.gameObject.SetActive(false);
         miniGameCanvas.gameObject.SetActive(true);
         chestButton.SetActive(false);
+        Time.timeScale = 0;
     }
 
     public void CloseMiniGame()
@@ -45,6 +46,7 @@ public class GameScript : MonoBehaviour
         villageCanvas.gameObject.SetActive(true);
         miniGameCanvas.gameObject.SetActive(false);
         StartCooldown();
+        Time.timeScale = 1;
     }
 
     private void StartCooldown()

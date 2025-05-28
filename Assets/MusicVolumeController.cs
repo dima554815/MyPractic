@@ -1,4 +1,4 @@
-/*using UnityEngine;
+using UnityEngine;
 using UnityEngine.Audio;
 
 public class MusicVolumeController : MonoBehaviour
@@ -50,57 +50,4 @@ public class MusicVolumeController : MonoBehaviour
     
     // Свойство для получения текущей громкости
     public float CurrentVolume => currentVolume;
-}*/
-using UnityEngine;
-using UnityEngine.Audio;
-
-public class MusicVolumeController : MonoBehaviour
-{
-    [SerializeField] private AudioSource musicAudioSource;
-    [SerializeField] private AudioMixer audioMixer;
-    
-    private const string MixerVolumeParam = "MusicVolume";
-    private const string VolumePrefKey = "MusicVolumeLevel";
-    
-    private const float MinVolumeDB = -80f;
-    private const float MaxVolumeDB = 0f;
-    
-    private float currentVolume = 0.5f;
-
-    private void Awake()
-    {
-        // Загружаем сохраненную громкость (по умолчанию 0.5)
-        currentVolume = PlayerPrefs.GetFloat(VolumePrefKey, 0.5f);
-        SetVolume(currentVolume);
-        
-        // Делаем объект неуничтожаемым при загрузке новых сцен
-        DontDestroyOnLoad(gameObject);
-    }
-
-    public void SetVolume(float volume)
-    {
-        currentVolume = Mathf.Clamp01(volume);
-        
-        // Сохраняем значение
-        PlayerPrefs.SetFloat(VolumePrefKey, currentVolume);
-        PlayerPrefs.Save(); // Явное сохранение
-        
-        // Применяем к AudioSource
-        if (musicAudioSource != null)
-        {
-            musicAudioSource.volume = currentVolume;
-        }
-        
-        // Применяем к AudioMixer
-        if (audioMixer != null)
-        {
-            float volumeDB = Mathf.Lerp(MinVolumeDB, MaxVolumeDB, currentVolume);
-            audioMixer.SetFloat(MixerVolumeParam, volumeDB);
-        }
-    }
-    
-    public float GetCurrentVolume()
-    {
-        return currentVolume;
-    }
 }
