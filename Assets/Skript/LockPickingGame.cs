@@ -261,8 +261,7 @@ public class LockPickingGame : MonoBehaviour
     public void CloseMiniGame()
     {
         AudioManager.Instance.PlayButtonClick(4);
-        gameObject.SetActive(false); 
-        //FindObjectOfType<GameScript>().CloseMiniGame();
+        FindObjectOfType<GameScript>().CloseMiniGame();
     }
 
    
