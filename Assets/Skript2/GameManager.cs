@@ -1,227 +1,289 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Timers")]
-    public ImageTimerHarvest HarvestTimer;
-    public TimerEating EatingTimer;
-    public Image RaidTimerImg;
-    public Image PeasantTimerImg;
-    public Image WarriorTimerImg;
+    // Основные ресурсы
+    public int peasantCount = 3;
+    public int warriorsCount = 1;
+    public int wheatCount = 10;
+    public TMP_Text peasantsText;
+    public TMP_Text warriorsText;
+    public TMP_Text wheatText;
 
-    [Header("Buttons")]
-    public Button peasantButton;
-    public Button warriorButton;
-    public Button peasantUpgradeButton;
-    public Button warriorUpgradeButton;
-    public Button harvestUpgradeButton;
+    // Таймеры и улучшения
+    public ImageTimerHarvest harvestTimer;
+    public TimerEating eatingTimer;
+    public Image raidTimerImage;
+    public float raidMaxTime = 30f;
+    private float raidTimer;
+    public int nextRaid = 1;
+    public int raidIncrease = 1;
 
-    [Header("UI Text")]
-    public TMP_Text resourcesText;
+    // Система найма
+    public Button hirePeasantButton;
+    public Button hireWarriorButton;
+    public Image peasantTimerImage;
+    public Image warriorTimerImage;
+    public float peasantCreateTime = 5f;
+    public float warriorCreateTime = 7f;
+    private float peasantTimer = 0f;
+    private float warriorTimer = 0f;
+    public int peasantCost = 10;
+    public int warriorCost = 15;
+
+    // Система улучшений
+    public Button upgradePeasantButton;
+    public Button upgradeWarriorButton;
+    public Button upgradeHarvestButton;
+    public TMP_Text peasantLevelText;
+    public TMP_Text warriorLevelText;
+    public TMP_Text harvestLevelText;
     public TMP_Text peasantUpgradeCostText;
     public TMP_Text warriorUpgradeCostText;
     public TMP_Text harvestUpgradeCostText;
+    public int peasantUpgradeCost = 50;
+    public int warriorUpgradeCost = 50;
+    public int harvestUpgradeCost = 50;
+    private int peasantLevel = 0;
+    private int warriorLevel = 0;
+    private int harvestLevel = 0;
+    public float peasantUpgradeAmount = 0.1f;
+    public float warriorUpgradeAmount = 0.1f;
+    public float harvestUpgradeAmount = 0.1f;
 
-    [Header("Game Parameters")]
-    public int peasantCount;
-    public int warriorsCount;
-    public int wheatCount;
+    // Игровое время
+    public TMP_Text gameTimeText;
+    private float gameTime;
 
-    public int wheatPerPeasant;
-    public int wheatToWarriors;
+    // Экран проигрыша
+    public GameObject gameOverScreen;
+    public TMP_Text finalTimeText;
+    public Button restartButton;
 
-    public int peasantCost;
-    public int warriorCost;
-
-    public float peasantCreateTime;
-    public float warriorCreateTime;
-    public float raidMaxTime;
-    public int raidIncrease;
-    public int nextRaid;
-    public GameObject GameOverScreen;
-
-    [Header("Upgrade System")]
-    public int peasantSpeedUpgradeLevel = 0;
-    public int warriorSpeedUpgradeLevel = 0;
-    public int harvestSpeedUpgradeLevel = 0;
-    public int peasantSpeedUpgradeCost = 50;
-    public int warriorSpeedUpgradeCost = 50;
-    public int harvestSpeedUpgradeCost = 50;
-    public float peasantSpeedUpgradeAmount = 0.1f;
-    public float warriorSpeedUpgradeAmount = 0.1f;
-    public float harvestSpeedUpgradeAmount = 0.1f;
-
-    private float peasantTimer = -2;
-    private float warriorTimer = -2;
-    private float raidTimer;
-   
     void Start()
+
+
     {
-        UpdateText();
-        UpdateUpgradeCostTexts();
-        raidTimer = raidMaxTime;
-        UpdateButtonsInteractable();
-       
+         raidTimer = raidMaxTime;
+    
+        // Обработчики с звуками
+        restartButton.onClick.AddListener(() => {
+            AudioManager.Instance.PlayButtonClick(0);
+            RestartGame();
+        });
+
+        hirePeasantButton.onClick.AddListener(() => {
+            AudioManager.Instance.PlayButtonClick(2);
+            HirePeasant();
+        });
+
+        hireWarriorButton.onClick.AddListener(() => {
+            AudioManager.Instance.PlayButtonClick(1);
+            HireWarrior();
+        });
+
+        upgradePeasantButton.onClick.AddListener(() => {
+            AudioManager.Instance.PlayButtonClick(3);
+            UpgradePeasant();
+        });
+
+        upgradeWarriorButton.onClick.AddListener(() => {
+            AudioManager.Instance.PlayButtonClick(3);
+            UpgradeWarrior();
+        });
+
+        upgradeHarvestButton.onClick.AddListener(() => {
+            AudioManager.Instance.PlayButtonClick(3);
+            UpgradeHarvest();
+        });
+
+        
+       /* raidTimer = raidMaxTime;
+        restartButton.onClick.AddListener(RestartGame);
+
+        hirePeasantButton.onClick.AddListener(HirePeasant);
+        hireWarriorButton.onClick.AddListener(HireWarrior);
+        upgradePeasantButton.onClick.AddListener(UpgradePeasant);
+        upgradeWarriorButton.onClick.AddListener(UpgradeWarrior);
+        upgradeHarvestButton.onClick.AddListener(UpgradeHarvest);*/
+
+        // Инициализация изображений таймеров
+        peasantTimerImage.gameObject.SetActive(false);
+        warriorTimerImage.gameObject.SetActive(false);
+        
+        UpdateAllUI();
     }
 
     void Update()
     {
-        raidTimer -= Time.deltaTime;
-        RaidTimerImg.fillAmount = raidTimer / raidMaxTime;
+        if (gameOverScreen.activeSelf) return;
 
-        if(raidTimer <= 0)
+        gameTime += Time.deltaTime;
+        gameTimeText.text = $"Время в игре: {Mathf.FloorToInt(gameTime / 60):00}:{Mathf.FloorToInt(gameTime % 60):00}";
+
+        // Набеги
+        raidTimer -= Time.deltaTime;
+        raidTimerImage.fillAmount = raidTimer / raidMaxTime;
+        if (raidTimer <= 0)
         {
             raidTimer = raidMaxTime;
             warriorsCount -= nextRaid;
             nextRaid += raidIncrease;
-        }
-          
-        if(HarvestTimer.Tick)
-        {
-            wheatCount += peasantCount * wheatPerPeasant;
-            UpdateButtonsInteractable();
+            UpdateAllUI();
         }
 
-        if(EatingTimer.Tick)
+        // Обновление таймеров найма
+        UpdateHireTimers();
+
+        // Экономика
+        if (harvestTimer.Tick)
         {
-            wheatCount -= warriorsCount * wheatToWarriors;
-            UpdateButtonsInteractable();
+            wheatCount += peasantCount * 2;
+            UpdateAllUI();
         }
 
-        if(peasantTimer > 0)
+        if (eatingTimer.Tick)
         {
-            peasantTimer -= Time.deltaTime;
-            PeasantTimerImg.fillAmount = peasantTimer / peasantCreateTime;
-        }
-        else if(peasantTimer > -1)
-        {
-            PeasantTimerImg.fillAmount = 1;
-            peasantButton.interactable = true;
-            peasantCount += 1;
-            peasantTimer = -2;
-            UpdateButtonsInteractable();
+            wheatCount -= warriorsCount;
+            UpdateAllUI();
         }
 
-        if(warriorTimer > 0)
+        // Проверка поражения
+        if (warriorsCount < 0)
         {
-            warriorTimer -= Time.deltaTime;
-            WarriorTimerImg.fillAmount = warriorTimer / warriorCreateTime;
-        }
-        else if (warriorTimer > -1)
-        {
-            WarriorTimerImg.fillAmount = 1;
-            warriorButton.interactable = true;
-            warriorsCount += 1;
-            warriorTimer = -2;
-            UpdateButtonsInteractable();
-        }
-
-        UpdateText();
-
-        if(warriorsCount < 0)
-        {
-            Time.timeScale = 0;
-            GameOverScreen.SetActive(true);
+            GameOver();
         }
     }
 
-    public void CreatePeasant()
+    void UpdateHireTimers()
     {
-        if (wheatCount >= peasantCost)
+        // Таймер крестьян
+        if (peasantTimer > 0)
+        {
+            peasantTimer -= Time.deltaTime;
+            peasantTimerImage.fillAmount = peasantTimer / peasantCreateTime;
+            peasantTimerImage.gameObject.SetActive(true);
+        }
+        else if (peasantTimer <= 0 && peasantTimer > -1)
+        {
+            peasantCount++;
+            peasantTimer = -2;
+            UpdateAllUI();
+        }
+
+        // Таймер воинов
+        if (warriorTimer > 0)
+        {
+            warriorTimer -= Time.deltaTime;
+            warriorTimerImage.fillAmount = warriorTimer / warriorCreateTime;
+            warriorTimerImage.gameObject.SetActive(true);
+        }
+        else if (warriorTimer <= 0 && warriorTimer > -1)
+        {
+            warriorsCount++;
+            warriorTimer = -2;
+            UpdateAllUI();
+        }
+    }
+
+    public void UpdateAllUI()
+    {
+        // Ресурсы
+        peasantsText.text = peasantCount.ToString();
+        warriorsText.text = warriorsCount.ToString();
+        wheatText.text = wheatCount.ToString();
+
+        // Уровни улучшений
+        peasantLevelText.text = $"Lv.крестьян {peasantLevel}";
+        warriorLevelText.text = $"Lv.воинов {warriorLevel}";
+        harvestLevelText.text = $"Lv.сбора {harvestLevel}";
+
+        // Стоимость улучшений
+        peasantUpgradeCostText.text = $"Цена {peasantUpgradeCost} пш.";
+        warriorUpgradeCostText.text = $"Цена {warriorUpgradeCost} пш.";
+        harvestUpgradeCostText.text = $"Цена {harvestUpgradeCost} пш.";
+
+        // Кнопки найма
+        hirePeasantButton.interactable = wheatCount >= peasantCost && peasantTimer <= 0;
+        hireWarriorButton.interactable = wheatCount >= warriorCost && warriorTimer <= 0;
+
+        // Кнопки улучшений
+        upgradePeasantButton.interactable = wheatCount >= peasantUpgradeCost;
+        upgradeWarriorButton.interactable = wheatCount >= warriorUpgradeCost;
+        upgradeHarvestButton.interactable = wheatCount >= harvestUpgradeCost;
+    }
+
+    public void HirePeasant()
+    {
+        if (wheatCount >= peasantCost && peasantTimer <= 0)
         {
             wheatCount -= peasantCost;
             peasantTimer = peasantCreateTime;
-            peasantButton.interactable = false;
-            UpdateButtonsInteractable();
+            peasantTimerImage.gameObject.SetActive(true);
+            UpdateAllUI();
         }
     }
 
-    public void CreateWarrior()
+    public void HireWarrior()
     {
-        if (wheatCount >= warriorCost)
+        if (wheatCount >= warriorCost && warriorTimer <= 0)
         {
             wheatCount -= warriorCost;
             warriorTimer = warriorCreateTime;
-            warriorButton.interactable = false;
-            UpdateButtonsInteractable();
+            warriorTimerImage.gameObject.SetActive(true);
+            UpdateAllUI();
         }
     }
 
-    public void UpgradePeasantSpeed()
+    public void UpgradePeasant()
     {
-        if (wheatCount >= peasantSpeedUpgradeCost)
+        if (wheatCount >= peasantUpgradeCost)
         {
-            wheatCount -= peasantSpeedUpgradeCost;
-            peasantCreateTime = Mathf.Max(0.5f, peasantCreateTime * (1 - peasantSpeedUpgradeAmount));
-            peasantSpeedUpgradeLevel++;
-            peasantSpeedUpgradeCost = (int)(peasantSpeedUpgradeCost * 1.5f);
-            UpdateText();
-            UpdateUpgradeCostTexts();
-            UpdateButtonsInteractable();
+            wheatCount -= peasantUpgradeCost;
+            peasantCreateTime = Mathf.Max(0.5f, peasantCreateTime * (1 - peasantUpgradeAmount));
+            peasantLevel++;
+            peasantUpgradeCost = (int)(peasantUpgradeCost * 1.5f);
+            UpdateAllUI();
         }
     }
 
-    public void UpgradeWarriorSpeed()
+    public void UpgradeWarrior()
     {
-        if (wheatCount >= warriorSpeedUpgradeCost)
+        if (wheatCount >= warriorUpgradeCost)
         {
-            wheatCount -= warriorSpeedUpgradeCost;
-            warriorCreateTime = Mathf.Max(0.5f, warriorCreateTime * (1 - warriorSpeedUpgradeAmount));
-            warriorSpeedUpgradeLevel++;
-            warriorSpeedUpgradeCost = (int)(warriorSpeedUpgradeCost * 1.5f);
-            UpdateText();
-            UpdateUpgradeCostTexts();
-            UpdateButtonsInteractable();
+            wheatCount -= warriorUpgradeCost;
+            warriorCreateTime = Mathf.Max(0.5f, warriorCreateTime * (1 - warriorUpgradeAmount));
+            warriorLevel++;
+            warriorUpgradeCost = (int)(warriorUpgradeCost * 1.5f);
+            UpdateAllUI();
         }
     }
 
-    public void UpgradeHarvestSpeed()
+    public void UpgradeHarvest()
     {
-        if (wheatCount >= harvestSpeedUpgradeCost)
+        if (wheatCount >= harvestUpgradeCost)
         {
-            wheatCount -= harvestSpeedUpgradeCost;
-            HarvestTimer.MaxTime = Mathf.Max(1f, HarvestTimer.MaxTime * (1 - harvestSpeedUpgradeAmount));
-            harvestSpeedUpgradeLevel++;
-            harvestSpeedUpgradeCost = (int)(harvestSpeedUpgradeCost * 1.5f);
-            UpdateText();
-            UpdateUpgradeCostTexts();
-            UpdateButtonsInteractable();
+            wheatCount -= harvestUpgradeCost;
+            harvestTimer.MaxTime = Mathf.Max(1f, harvestTimer.MaxTime * (1 - harvestUpgradeAmount));
+            harvestLevel++;
+            harvestUpgradeCost = (int)(harvestUpgradeCost * 1.5f);
+            UpdateAllUI();
         }
     }
 
-    private void UpdateText()
+    void GameOver()
     {
-        resourcesText.text = 
-            $"Крестьяне: {peasantCount}\n" +
-            $"Воины: {warriorsCount}\n" +
-            $"Зерно: {wheatCount}\n\n" +
-            $"Lv. крестьян: {peasantSpeedUpgradeLevel}\n" +
-            $"Lv. воинов: {warriorSpeedUpgradeLevel}\n" +
-            $"Lv. урожая: {harvestSpeedUpgradeLevel}";
+        Time.timeScale = 0;
+        gameOverScreen.SetActive(true);
+        finalTimeText.text = $"Итоговое время: {Mathf.FloorToInt(gameTime / 60):00}:{Mathf.FloorToInt(gameTime % 60):00}";
     }
 
-    private void UpdateUpgradeCostTexts()
+    public void RestartGame()
     {
-        peasantUpgradeCostText.text = $"ускорить: {peasantSpeedUpgradeCost} зерна";
-        warriorUpgradeCostText.text = $"ускорить: {warriorSpeedUpgradeCost} зерна";
-        harvestUpgradeCostText.text = $"ускорить: {harvestSpeedUpgradeCost} зерна";
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
-    private void UpdateButtonsInteractable()
-    {
-        // Кнопки найма
-        peasantButton.interactable = wheatCount >= peasantCost && peasantTimer <= -1;
-        warriorButton.interactable = wheatCount >= warriorCost && warriorTimer <= -1;
-
-        // Кнопки улучшений
-        peasantUpgradeButton.interactable = wheatCount >= peasantSpeedUpgradeCost;
-        warriorUpgradeButton.interactable = wheatCount >= warriorSpeedUpgradeCost;
-        harvestUpgradeButton.interactable = wheatCount >= harvestSpeedUpgradeCost;
-    }
-
-   
 }

@@ -123,10 +123,13 @@ public class LockPickingGame : MonoBehaviour
     private int[] currentPins = new int[3];
     private float currentTime;
     private bool gameActive;
+    private int warriorsReward;
+    private int peasantsReward;
+    private int wheatReward;
 
     private void OnEnable()
     {
-        GenerateSolvableCombination();
+       // GenerateSolvableCombination();
         ResetGame();
     }
 
@@ -160,6 +163,7 @@ public class LockPickingGame : MonoBehaviour
 
     public void ResetGame()
     {
+        GenerateSolvableCombination();
         currentTime = gameDuration;
         gameActive = true;
         winPanel.SetActive(false);
@@ -179,12 +183,14 @@ public class LockPickingGame : MonoBehaviour
         currentTime -= Time.unscaledDeltaTime;
         timerText.text = Mathf.Ceil(currentTime).ToString();
 
-        if (currentTime <= 0) LoseGame();
+        if (currentTime <= 0) LoseGame();      
     }
 
     public void UseTool(int toolIndex)
     {
         if (!gameActive) return;
+
+        AudioManager.Instance.PlayButtonClick(toolIndex); // Разные звуки для разных инструментов
 
         for (int i = 0; i < 3; i++)
         {
@@ -209,6 +215,16 @@ public class LockPickingGame : MonoBehaviour
         gameActive = false;
         winPanel.SetActive(true);
         SetBackground(winBackground);
+
+         // Генерируем награды
+        warriorsReward = Random.Range(1, 4); // 1-5 воинов
+        peasantsReward = Random.Range(1, 6); // 1-3 крестьян
+        wheatReward = Random.Range(10, 31); // 10-30 пшеницы
+    
+        // Отображаем награды
+        warriorsRewardText.text = "Воины:+" + warriorsReward;
+        peasantsRewardText.text = "Крестьяне:+" + peasantsReward;
+        wheatRewardText.text = "Пщеница:+" + wheatReward;
     }
 
     private void LoseGame()
@@ -216,34 +232,22 @@ public class LockPickingGame : MonoBehaviour
         gameActive = false;
         losePanel.SetActive(true);
         SetBackground(loseBackground);
-
-         // Генерируем награды
-        warriorsReward = Random.Range(1, 6); // 1-5 воинов
-        peasantsReward = Random.Range(1, 4); // 1-3 крестьян
-        wheatReward = Random.Range(10, 31); // 10-30 пшеницы
-    
-        // Отображаем награды
-        warriorsRewardText.text = "+" + warriorsReward;
-        peasantsRewardText.text = "+" + peasantsReward;
-        wheatRewardText.text = "+" + wheatReward;
     }
 
-    // Вызывается при нажатии кнопки "Забрать награду"
     public void ClaimReward()
     {
+        AudioManager.Instance.PlayButtonClick(3);
         GameManager gameManager = FindObjectOfType<GameManager>();
         if (gameManager != null)
         {
             gameManager.warriorsCount += warriorsReward;
             gameManager.peasantCount += peasantsReward;
             gameManager.wheatCount += wheatReward;
-        
-            gameManager.UpdateText();
-            gameManager.UpdateButtonsInteractable();
+            
+            gameManager.UpdateAllUI();
         }
-    
-        // Закрываем мини-игру
-        FindObjectOfType<GameScript>().CloseMiniGame();
+        
+        CloseMiniGame();
     }
 
     private void SetBackground(Sprite background)
@@ -256,11 +260,10 @@ public class LockPickingGame : MonoBehaviour
 
     public void CloseMiniGame()
     {
-        FindObjectOfType<GameScript>().CloseMiniGame();
+        AudioManager.Instance.PlayButtonClick(4);
+        gameObject.SetActive(false); 
+        //FindObjectOfType<GameScript>().CloseMiniGame();
     }
 
-    // Методы для кнопок (назначьте в инспекторе!)
-    public void UseDrill() => UseTool(0);
-    public void UseHammer() => UseTool(1);
-    public void UsePick() => UseTool(2);
+   
 }

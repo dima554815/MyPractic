@@ -1,123 +1,107 @@
-/*using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class GameScript : MonoBehaviour
+public class GameStateManager : MonoBehaviour
 {
-    public Canvas villageCanvas;
-    public Canvas miniGameCanvas;
-    public GameObject chestButton;
-    public float chestCooldown = 10f;
+    [Header("UI References")]
+    public GameObject mainMenuCanvas;
+    public GameObject gameCanvas;
+    public Button playButton;
+    public Button exitButton;
+    public Button returnToMenuButton;
 
-    private float cooldownTimer;
-    private bool isChestAvailable = true;
+    [Header("Game Objects")]
+    public GameObject[] gameObjectsToReset; // Все объекты, которые нужно перезапускать
+    private Vector3[] initialPositions;
+    private Quaternion[] initialRotations;
 
     void Start()
     {
-        villageCanvas.gameObject.SetActive(true);
-        miniGameCanvas.gameObject.SetActive(false);
-        chestButton.SetActive(false);
-        StartCooldown();
+        // Сохраняем начальные позиции всех объектов
+        SaveInitialStates();
+
+        // Настройка кнопок
+        playButton.onClick.AddListener(StartGame);
+        exitButton.onClick.AddListener(ExitGame);
+        returnToMenuButton.onClick.AddListener(ReturnToMainMenu);
+
+        // Начальное состояние
+        ShowMainMenu();
     }
 
-    void Update()
+    void SaveInitialStates()
     {
-        if (!isChestAvailable)
+        initialPositions = new Vector3[gameObjectsToReset.Length];
+        initialRotations = new Quaternion[gameObjectsToReset.Length];
+        
+        for(int i = 0; i < gameObjectsToReset.Length; i++)
         {
-            cooldownTimer -= Time.deltaTime;
-            if (cooldownTimer <= 0f)
+            if(gameObjectsToReset[i] != null)
             {
-                ShowChestButton();
+                initialPositions[i] = gameObjectsToReset[i].transform.position;
+                initialRotations[i] = gameObjectsToReset[i].transform.rotation;
             }
         }
     }
 
-    public void OpenMiniGame()
+    void ResetGameObjects()
     {
-        if (!isChestAvailable) return;
-
-        villageCanvas.gameObject.SetActive(false);
-        miniGameCanvas.gameObject.SetActive(true);
-        chestButton.SetActive(false);
+        for(int i = 0; i < gameObjectsToReset.Length; i++)
+        {
+            if(gameObjectsToReset[i] != null)
+            {
+                gameObjectsToReset[i].transform.position = initialPositions[i];
+                gameObjectsToReset[i].transform.rotation = initialRotations[i];
+                
+                // Дополнительный сброс для Rigidbody
+                Rigidbody rb = gameObjectsToReset[i].GetComponent<Rigidbody>();
+                if(rb != null)
+                {
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
+            }
+        }
     }
 
-    public void CloseMiniGame()
+    void ShowMainMenu()
     {
-        villageCanvas.gameObject.SetActive(true);
-        miniGameCanvas.gameObject.SetActive(false);
-        StartCooldown();
+        mainMenuCanvas.SetActive(true);
+        gameCanvas.SetActive(false);
+        Time.timeScale = 0f; // Полная остановка времени
     }
 
-    private void StartCooldown()
+    void StartGame()
     {
-        isChestAvailable = false;
-        cooldownTimer = chestCooldown;
+        mainMenuCanvas.SetActive(false);
+        gameCanvas.SetActive(true);
+        ResetGameObjects(); // Полный сброс состояния
+        Time.timeScale = 1f; // Нормальное время
     }
 
-    private void ShowChestButton()
+    void ReturnToMainMenu()
     {
-        chestButton.SetActive(true);
-        isChestAvailable = true;
+        ShowMainMenu();
+        ResetGameObjects(); // Полный сброс перед возвратом в меню
     }
-}*/
-using UnityEngine;
-using UnityEngine.UI;
 
-public class GameScript : MonoBehaviour
-{
-    public Canvas villageCanvas;
-    public Canvas miniGameCanvas;
-    public GameObject chestButton;
-    public float chestCooldown = 10f;
-
-    private float cooldownTimer;
-    private bool isChestAvailable = true;
-
-    void Start()
+    void ExitGame()
     {
-        villageCanvas.gameObject.SetActive(true);
-        miniGameCanvas.gameObject.SetActive(false);
-        chestButton.SetActive(false);
-        StartCooldown();
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 
     void Update()
     {
-        if (!isChestAvailable)
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
-            cooldownTimer -= Time.deltaTime;
-            if (cooldownTimer <= 0f) ShowChestButton();
+            if(gameCanvas.activeSelf)
+            {
+                ReturnToMainMenu();
+            }
         }
-    }
-
-    public void OpenMiniGame()
-    {
-        if (!isChestAvailable) return;
-        
-        // Полная остановка деревни
-        villageCanvas.gameObject.SetActive(false);
-        Time.timeScale = 0f; // Останавливаем все процессы
-        
-        miniGameCanvas.gameObject.SetActive(true);
-        chestButton.SetActive(false);
-    }
-
-    public void CloseMiniGame()
-    {
-        Time.timeScale = 1f; // Возобновляем время
-        villageCanvas.gameObject.SetActive(true);
-        miniGameCanvas.gameObject.SetActive(false);
-        StartCooldown();
-    }
-
-    private void StartCooldown()
-    {
-        isChestAvailable = false;
-        cooldownTimer = chestCooldown;
-    }
-
-    private void ShowChestButton()
-    {
-        chestButton.SetActive(true);
-        isChestAvailable = true;
     }
 }
